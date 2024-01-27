@@ -79,41 +79,8 @@
   doom-font                      (font-spec :family "Jetbrains Mono" :size 14.0)
   doom-localleader-key           ","
   read-process-output-max        (* 1024 1024)
+  projectile-project-search-path '("~/dev/")
   projectile-enable-caching      nil)
-
-;; Fell free to move this to a bindings file you load from config.el
-
-;; (after! paredit
-
-;;   (define-key paredit-mode-map (kbd "C-<left>") nil)
-
-;;   (define-key paredit-mode-map (kbd "C-<right>") nil)
-
-;;   (map! :nvi
-
-;;         :desc "Forward barf"
-;;         "M-<left>" #'paredit-forward-barf-sexp
-
-;;         :desc "Forward slurp"
-;;         "M-<right>" #'paredit-forward-slurp-sexp
-
-;;         :desc "Backward slurp"
-;;         "M-S-<left>" #'paredit-backward-slurp-sexp
-
-;;         :desc "Backward barf"
-;;         "M-S-<right>" #'paredit-backward-barf-sexp
-
-;;         :desc "Backward"
-;;         "C-c <left>" #'paredit-backward
-
-;;         :desc "Forward"
-;;         "C-c <right>" #'paredit-forward
-
-;;         :desc "Expand region"
-;;         "s-<up>" #'er/expand-region
-
-;;         :desc "Reverse expand region"
-;;         "s-<down>" (lambda () (interactive) (er/expand-region -1))))
 
 (defun my-before-save-hook ()
   (when (or (eq major-mode 'clojure-mode)
@@ -161,10 +128,6 @@
                (format "[%s] " (projectile-project-name)))
               "%b")))
 
-(map! :leader
-      ;; Change default search to vertico, it gives you a nice preview of the files
-      :desc "Search project" "/" #'+vertico/project-search)
-
 ; I had to run this command in order to make the transparent title bar work
 ; defaults write org.gnu.Emacs TransparentTitleBar DARK
 (add-to-list 'default-frame-alist '(ns-appearance . 'light))
@@ -172,3 +135,6 @@
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
+
+(load! "+nu")
+(load! "+bindings")
