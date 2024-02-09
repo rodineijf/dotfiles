@@ -12,10 +12,16 @@
 
 (use-package! cider
   :hook
-  (after-save . cider-load-buffer)
+  (after-save . (lambda ()
+                        (when (and (bound-and-true-p cider-mode)
+                                   (not (string-match-p "project.clj" (buffer-file-name))))
+                          (cider-load-buffer))))
   :config
+  (modify-syntax-entry ?: "w" clojure-mode-syntax-table)
   (modify-syntax-entry ?- "w" clojure-mode-syntax-table)
-  (modify-syntax-entry ?| "w" clojure-mode-syntax-table))
+  (modify-syntax-entry ?| "w" clojure-mode-syntax-table)
+  (modify-syntax-entry ?. "w" clojure-mode-syntax-table)
+  (modify-syntax-entry ?/ "w" clojure-mode-syntax-table))
 
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
@@ -55,6 +61,30 @@
  
 (use-package company-box
   :hook (company-mode . company-box-mode))
+
+(after! paredit
+  (define-key paredit-mode-map (kbd "C-<left>") nil)
+  (define-key paredit-mode-map (kbd "C-<right>") nil)
+
+  (map! :nvi
+
+        :desc "Forward barf"
+        "C-}" #'paredit-forward-barf-sexp
+
+        :desc "Forward slurp"
+        "C-)" #'paredit-forward-slurp-sexp
+
+        :desc "Backward slurp"
+        "C-(" #'paredit-backward-slurp-sexp
+
+        :desc "Backward barf"
+        "C-{" #'paredit-backward-barf-sexp
+
+        :desc "Backward"
+        "C-c <left>" #'paredit-backward
+
+        :desc "Forward"
+        "C-c <right>" #'paredit-forward))
 
 (load! "+nu")
 (load! "+bindings")
