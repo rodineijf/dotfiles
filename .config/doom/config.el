@@ -39,7 +39,12 @@
 
 (use-package magit-delta
   :hook
-  (magit-mode . magit-delta-mode))
+  (magit-mode . magit-delta-mode)
+  :config
+  (setq
+    magit-delta-default-dark-theme "Dracula"
+    magit-delta-default-light-theme "Github"
+    magit-delta-hide-plus-minus-markers t))
 
 (use-package! lsp-mode
   :commands
