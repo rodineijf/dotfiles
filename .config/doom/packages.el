@@ -20,7 +20,7 @@
 ;; `:files' in the `:recipe':
 ;; (package! this-package
 ;;   :recipe (:host github :repo "username/repo"
-;;            :files ("some-file.el" "src/lisp/*.el")))
+
 
 ;; If you'd like to disable a package included with Doom, you can do so here
 ;; with the `:disable' property:
@@ -49,13 +49,6 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
-(package! copilot
-  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
-
 (package! magit-delta)
 
-;; (package! parinfer-rust-mode)
-
-; company started to freeze after adding parinfer, some people had the same issue
-; using copilot and suggested to use company-box
-(package! company-box)
+(package! evil-cleverparens)
