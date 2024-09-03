@@ -12,6 +12,8 @@
   evil-kill-on-visual-paste      nil
   corfu-preselect                'first)
 
+(add-hook 'dart-mode-hook #'tree-sitter-hl-mode)
+
 (use-package! cider
   :config
   (setq cider-reuse-dead-repls nil)
