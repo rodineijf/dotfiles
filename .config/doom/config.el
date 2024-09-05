@@ -12,21 +12,20 @@
   evil-kill-on-visual-paste      nil
   corfu-preselect                'first)
 
-(add-hook 'dart-mode-hook #'tree-sitter-hl-mode)
+; (add-hook 'dart-mode-hook #'tree-sitter-hl-mode)
+
+(defun cider-load-buffer-and-reload-lsp ()
+  (when (and (bound-and-true-p cider-mode)
+             (not (string-match-p "project.clj" (buffer-file-name))))
+    (cider-load-buffer)
+    ;; fix semantics tokens wrongly highlighted after modifyng the buffer
+    (lsp)))
 
 (use-package! cider
   :config
   (setq cider-reuse-dead-repls nil)
   :hook
-  (after-save . (lambda ()
-                        (when (and (bound-and-true-p cider-mode)
-                                   (not (string-match-p "project.clj" (buffer-file-name))))
-                          (cider-load-buffer)
-                          ;; fix semantics tokens wrongly highlighted after modifyng the buffer
-                          (lsp))))
-  :config
-  (dolist (char '(?* ?! ?: ?- ?| ?\. ?/ ??))
-    (modify-syntax-entry char "w" clojure-mode-syntax-table)))
+  (after-save . cider-load-buffer-and-reload-lsp))
 
 (use-package magit-delta
   :hook
@@ -54,8 +53,14 @@
          (emacs-lisp-mode . paredit-mode)))
 
 (use-package! evil-cleverparens
-  :when (modulep! :editor evil +everywhere)
-  :hook (paredit-mode . evil-cleverparens-mode))
+  :init   (setq evil-cleverparens-swap-move-by-word-and-symbol t)
+  :when   (modulep! :editor evil +everywhere)
+  :hook   (paredit-mode . evil-cleverparens-mode)
+  :config
+  (setq evil-move-beyond-eol t))
+
+(after! evil
+  (defalias 'forward-evil-word 'forward-evil-symbol))
 
 (after! consult 
   (consult-customize
@@ -69,30 +74,6 @@
    ;; find-file
    consult--source-recent-file consult--source-project-recent-file consult--source-bookmark
    :preview-key 'any))
-
-(after! paredit
-  (define-key paredit-mode-map (kbd "C-<left>") nil)
-  (define-key paredit-mode-map (kbd "C-<right>") nil)
-
-  (map! :nvi
-
-        :desc "Forward barf"
-        "M-<left>" #'paredit-forward-barf-sexp
-
-        :desc "Forward slurp"
-        "M-<right>" #'paredit-forward-slurp-sexp
-
-        :desc "Backward slurp"
-        "M-S-<left>" #'paredit-backward-slurp-sexp
-
-        :desc "Backward barf"
-        "M-S-<right>" #'paredit-backward-barf-sexp
-
-        :desc "Backward"
-        "C-c <left>" #'paredit-backward
-
-        :desc "Forward"
-        "C-c <right>" #'paredit-forward))
 
 (use-package! lsp-dart
   :after dart-mode
