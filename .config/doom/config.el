@@ -66,14 +66,19 @@
   (consult-customize
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file
-   +default/search-project +default/search-other-project
-   +default/search-project-for-symbol-at-point
-   +default/search-cwd +default/search-other-cwd
-   +default/search-notes-for-symbol-at-point
-   +default/search-emacsd
-   ;; find-file
    consult--source-recent-file consult--source-project-recent-file consult--source-bookmark
-   :preview-key 'any))
+   :preview-key '(:debounce 0.2 any))
+  (when (modulep! :config default)
+    (consult-customize
+     +default/search-project +default/search-other-project
+     +default/search-project-for-symbol-at-point
+     +default/search-cwd +default/search-other-cwd
+     +default/search-notes-for-symbol-at-point
+     +default/search-emacsd
+     :preview-key '(:debounce 0.2 any)))
+  (consult-customize
+   consult-theme
+   :preview-key '("C-SPC" :debounce 0.5 'any)))
 
 (use-package! lsp-dart
   :after dart-mode
