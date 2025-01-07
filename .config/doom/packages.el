@@ -52,3 +52,6 @@
 (package! magit-delta)
 
 (package! evil-cleverparens)
+
+(package! copilot
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
