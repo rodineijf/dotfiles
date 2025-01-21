@@ -12,7 +12,7 @@
   evil-kill-on-visual-paste      nil
   corfu-preselect                'first)
 
-; (add-hook 'dart-mode-hook #'tree-sitter-hl-mode)
+(add-to-list 'default-frame-alist '(undecorated-round . t))
 
 (defun cider-load-buffer-and-reload-lsp ()
   (when (and (bound-and-true-p cider-mode)
@@ -50,8 +50,6 @@
   :hook
   (before-save . lsp-format-buffer))
 
-(add-to-list 'default-frame-alist '(undecorated-round . t))
-
 (use-package! paredit
   :hook ((clojure-mode . paredit-mode)
          (emacs-lisp-mode . paredit-mode)))
@@ -79,10 +77,7 @@
      +default/search-cwd +default/search-other-cwd
      +default/search-notes-for-symbol-at-point
      +default/search-emacsd
-     :preview-key '(:debounce 0.2 any)))
-  (consult-customize
-   consult-theme
-   :preview-key '("C-SPC" :debounce 0.5 'any)))
+     :preview-key '(:debounce 0.2 any))))
 
 (use-package! lsp-dart
   :after dart-mode
@@ -105,4 +100,3 @@
   :config
   (add-to-list 'copilot-indentation-alist '(prog-mode 2))
   (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2)))
-
