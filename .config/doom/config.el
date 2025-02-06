@@ -22,51 +22,39 @@
     (lsp)))
 
 (use-package go-mode
-  :hook
-  (go-mode . (lambda () (setq tab-width 2))))
+  :hook (go-mode . (lambda () (setq tab-width 2))))
 
 (use-package! cider
-  :config
-  (setq cider-reuse-dead-repls nil)
-  :hook
-  (after-save . cider-load-buffer-and-reload-lsp))
+  :config (setq cider-reuse-dead-repls nil)
+  :hook   (after-save . cider-load-buffer-and-reload-lsp))
 
 (use-package magit-delta
-  :hook
-  (magit-mode . magit-delta-mode)
-  :config
-  (setq
-    magit-delta-default-dark-theme "DarkNeon"
-    magit-delta-default-light-theme "Github"
-    magit-delta-hide-plus-minus-markers t))
+  :hook   (magit-mode . magit-delta-mode)
+  :config (setq magit-delta-default-dark-theme "DarkNeon"
+                magit-delta-default-light-theme "Github"
+                magit-delta-hide-plus-minus-markers t))
 
 (use-package evil-mc
   :config
   (add-to-list 'evil-mc-incompatible-minor-modes 'paredit-mode))
 
 (use-package! lsp-mode
-  :commands
-  lsp
-  :config
-  (setq lsp-semantic-tokens-enable t
-        ;; auto completion was not working with the default value
-        lsp-completion-no-cache t)
-  :hook
-  (before-save . lsp-format-buffer))
+  :commands lsp
+  :config   (setq lsp-semantic-tokens-enable t
+                  ;; auto completion was not working with the default value
+                  lsp-completion-no-cache t)
+  :hook     (before-save . lsp-format-buffer))
 
 (use-package smartparens
-  :hook (prog-mode text-mode markdown-mode)
-  :config
-  (smartparens-strict-mode t))
+  :hook   (prog-mode text-mode markdown-mode)
+  :config (smartparens-strict-mode t))
 
 (use-package! evil-cleverparens
-  :init
-  (setq evil-cleverparens-swap-move-by-word-and-symbol t)
-  (setq evil-cleverparens-move-skip-delimiters nil)
+  :init   (setq evil-cleverparens-swap-move-by-word-and-symbol t
+                evil-cleverparens-move-skip-delimiters nil)
   :when   (modulep! :editor evil +everywhere)
   :hook   (smartparens-mode . evil-cleverparens-mode)
-  :config
-  (setq evil-move-beyond-eol t))
+  :config (setq evil-move-beyond-eol t))
 
 (after! evil
   (defalias 'forward-evil-word 'forward-evil-symbol))
@@ -89,9 +77,9 @@
 (use-package! lsp-dart
   :after dart-mode
   :config
-  (setq lsp-dart-dap-flutter-hot-reload-on-save t)
-  (setq lsp-dart-sdk-dir (expand-file-name "~/sdk-flutter/bin/cache/dart-sdk"))
-  (setq lsp-dart-project-root-discovery-strategies '(closest-pubspec lsp-root))
+  (setq lsp-dart-dap-flutter-hot-reload-on-save t
+        lsp-dart-sdk-dir (expand-file-name "~/sdk-flutter/bin/cache/dart-sdk")
+        lsp-dart-project-root-discovery-strategies '(closest-pubspec lsp-root))
   (set-popup-rule! "\\*LSP Dart tests\\*" :height 0.3))
 
 (load! "+nu")
@@ -113,7 +101,6 @@
            ((modulep! :completion helm)    #'+helm/project-search-from-cwd)
            ((modulep! :completion vertico) #'+vertico/project-search-from-cwd)
            (#'rgrep)))))
-
 
 (defun +custom/search-src-dir ()
   "Conduct a text search in files under `src-dir'."
