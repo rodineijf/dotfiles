@@ -40,6 +40,10 @@
     magit-delta-default-light-theme "Github"
     magit-delta-hide-plus-minus-markers t))
 
+(use-package evil-mc
+  :config
+  (add-to-list 'evil-mc-incompatible-minor-modes 'paredit-mode))
+
 (use-package! lsp-mode
   :commands
   lsp
@@ -50,14 +54,17 @@
   :hook
   (before-save . lsp-format-buffer))
 
-(use-package! paredit
-  :hook ((clojure-mode . paredit-mode)
-         (emacs-lisp-mode . paredit-mode)))
+(use-package smartparens
+  :hook (prog-mode text-mode markdown-mode)
+  :config
+  (smartparens-strict-mode t))
 
 (use-package! evil-cleverparens
-  :init   (setq evil-cleverparens-swap-move-by-word-and-symbol t)
+  :init
+  (setq evil-cleverparens-swap-move-by-word-and-symbol t)
+  (setq evil-cleverparens-move-skip-delimiters nil)
   :when   (modulep! :editor evil +everywhere)
-  :hook   (paredit-mode . evil-cleverparens-mode)
+  :hook   (smartparens-mode . evil-cleverparens-mode)
   :config
   (setq evil-move-beyond-eol t))
 
@@ -92,11 +99,29 @@
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("<tab>"   . 'copilot-accept-completion)
-              ("TAB"     . 'copilot-accept-completion)
-              ("C-TAB"   . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word))
   :config
   (add-to-list 'copilot-indentation-alist '(prog-mode 2))
   (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2)))
+
+(defun +custom/search-test-dir ()
+  "Conduct a text search in files under `test-dir'."
+  (interactive)
+  (let* ((project-root (projectile-project-root))
+         (default-directory (expand-file-name "test" project-root)))
+    (call-interactively
+     (cond ((modulep! :completion ivy)     #'+ivy/project-search-from-cwd)
+           ((modulep! :completion helm)    #'+helm/project-search-from-cwd)
+           ((modulep! :completion vertico) #'+vertico/project-search-from-cwd)
+           (#'rgrep)))))
+
+
+(defun +custom/search-src-dir ()
+  "Conduct a text search in files under `src-dir'."
+  (interactive)
+  (let* ((project-root (projectile-project-root))
+         (default-directory (expand-file-name "src" project-root)))
+    (call-interactively
+     (cond ((modulep! :completion ivy)     #'+ivy/project-search-from-cwd)
+           ((modulep! :completion helm)    #'+helm/project-search-from-cwd)
+           ((modulep! :completion vertico) #'+vertico/project-search-from-cwd)
+           (#'rgrep)))))
