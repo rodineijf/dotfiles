@@ -6,11 +6,6 @@
        "t" #'+custom/search-test-dir :desc "Search test dir"))
 
 (map!
- (:map 'override
-       "C-h" #'evil-window-left
-       "C-l" #'evil-window-right))
-
-(map!
  (:map evil-window-map
        "a" #'ace-window))
 
@@ -45,3 +40,17 @@
        "TAB"      #'copilot-accept-completion
        "C-TAB"    #'copilot-accept-completion-by-word
        "C-<tab>"  #'copilot-accept-completion-by-word))
+
+(after! dap-mode 
+  (map!
+   :localleader
+   :map dart-mode-map
+   (:prefix ("d" . "debug")
+            (:prefix ("u" . "ui")
+                     "b" #'dap-ui-breakpoints
+                     "l" #'dap-ui-locals
+                     "s" #'dap-ui-sessions)
+            "b" #'dap-breakpoint-toggle
+            "a" #'+custom/dap-dart-attach-debug
+            "h" #'dap-hydra
+            "k" #'dap-disconnect)))
