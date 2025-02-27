@@ -48,8 +48,8 @@
   :hook     (before-save . lsp-format-buffer))
 
 (use-package smartparens
-  :hook   (prog-mode text-mode markdown-mode)
-  :config (smartparens-strict-mode t))
+  :hook   
+  (smartparens-mode . smartparens-strict-mode))
 
 (use-package! evil-cleverparens
   :init   (setq evil-cleverparens-swap-move-by-word-and-symbol t
@@ -133,11 +133,6 @@
          :cwd          (expand-file-name "mini-meta-repo" (getenv "NU_HOME"))
          :args         "-d macos"
          :vmServiceUri input)))
-
-(use-package centaur-tabs
-  :config 
-  (setq centaur-tabs-set-close-button nil)
-  (setq centaur-tabs-show-new-tab-button nil))
 
 (use-package! dap-mode
   :hook (dap-stopped . (lambda (_) (call-interactively #'dap-hydra))))

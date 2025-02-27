@@ -10,8 +10,8 @@
        "a" #'ace-window))
 
 (map!
- :nvi "C-)" #'evil-cp->
- :nvi "C-(" #'evil-cp-<)
+ :nvi "C-)" #'sp-forward-slurp-sexp
+ :nvi "C-(" #'sp-forward-barf-sexp)
 
 (map!
  (:when (modulep! :editor multiple-cursors)
