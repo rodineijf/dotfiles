@@ -1,9 +1,7 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(require 'ef-themes)
-
 (setq
-  doom-theme                     'ef-maris-dark
+  doom-theme                     'doom-gruvbox ;'doom-monokai-ristretto
   doom-font                      (font-spec :family "Jetbrains Mono" :size 14.0)
   doom-localleader-key           ","
   read-process-output-max        (* 1024 1024)
@@ -47,10 +45,6 @@
                   lsp-completion-no-cache t)
   :hook     (before-save . lsp-format-buffer))
 
-(use-package smartparens
-  :hook   
-  (smartparens-mode . smartparens-strict-mode))
-
 (use-package! evil-cleverparens
   :init   (setq evil-cleverparens-swap-move-by-word-and-symbol t
                 evil-cleverparens-move-skip-delimiters nil)
@@ -61,7 +55,7 @@
 (after! evil
   (defalias 'forward-evil-word 'forward-evil-symbol))
 
-(after! consult 
+(after! consult
   (consult-customize
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file
@@ -86,12 +80,7 @@
 
 (load! "+nu")
 (load! "+bindings")
-
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :config
-  (add-to-list 'copilot-indentation-alist '(prog-mode 2))
-  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2)))
+(load! "+ui")
 
 (defun +custom/search-test-dir ()
   "Conduct a text search in files under `test-dir'."
@@ -115,13 +104,7 @@
            ((modulep! :completion vertico) #'+vertico/project-search-from-cwd)
            (#'rgrep)))))
 
-(use-package aidermacs
-  :config
-  (setq aidermacs-backend 'vterm)
-  (setq aidermacs-default-model "o3-mini")
-  (setenv "AIDER_OPENAI_API_KEY" "dummy-key")
-  (setenv "AIDER_OPENAI_API_BASE" "http://127.0.0.1:8899/v1")
-  (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
+(load! "+ai")
 
 (defun +custom/dap-dart-attach-debug (input)
   (interactive "sEnter VM Service URI: ")
@@ -137,29 +120,25 @@
 (use-package! dap-mode
   :hook (dap-stopped . (lambda (_) (call-interactively #'dap-hydra))))
 
-(use-package pulsar
-  :hook
-  (after-init . pulsar-global-mode)
-  :config
-  (setq pulsar-pulse t)
-  (setq pulsar-delay 0.025)
-  (setq pulsar-iterations 10)
-  (setq pulsar-face 'evil-ex-lazy-highlight)
-  (add-to-list 'pulsar-pulse-functions 'flymake-goto-next-error)
-  (add-to-list 'pulsar-pulse-functions 'flymake-goto-prev-error) 
-  (add-to-list 'pulsar-pulse-functions 'evil-yank)
-  (add-to-list 'pulsar-pulse-functions 'evil-yank-line)
-  (add-to-list 'pulsar-pulse-functions 'evil-delete)
-  (add-to-list 'pulsar-pulse-functions 'evil-delete-line)
-  (add-to-list 'pulsar-pulse-functions 'evil-cp-yank)
-  (add-to-list 'pulsar-pulse-functions 'evil-cp-yank-line)
-  (add-to-list 'pulsar-pulse-functions 'evil-cp-delete)
-  (add-to-list 'pulsar-pulse-functions 'evil-cp-delete-line)
-  (add-to-list 'pulsar-pulse-functions 'evil-jump-item)
-  (add-to-list 'pulsar-pulse-functions 'diff-hl-next-hunk)
-  (add-to-list 'pulsar-pulse-functions 'diff-hl-previous-hunk)
-  (add-to-list 'pulsar-pulse-functions 'evil-window-left)
-  (add-to-list 'pulsar-pulse-functions 'evil-window-right)
-  (add-to-list 'pulsar-pulse-functions 'evil-window-up)
-  (add-to-list 'pulsar-pulse-functions 'evil-window-bottom)
-  (add-to-list 'pulsar-pulse-functions 'ace-window))
+;; Define a major mode
+(define-derived-mode navi-mode fundamental-mode "Navi Cheatsheet"
+  "Major mode for Navi Cheatsheet"
+  (setq font-lock-defaults '((navi-font-lock-keywords))))
+
+;; Define syntax highlighting rules
+(setq navi-font-lock-keywords '((";.*$" . 'font-lock-comment-face)
+                                ("^%.*$" . 'font-lock-keyword-face)
+                                ("^#.*$" . 'font-lock-function-name-face)
+                                ("<.*?>" . 'font-lock-string-face)
+                                ("^$.*$" . 'font-lock-variable-name-face)))
+
+
+(add-to-list 'auto-mode-alist '("\\.cheat\\'" . navi-mode))
+
+(defun my-evil-cp-insert-comment ()
+  "Move backward up a sexp, enter insert mode, and insert `#_`."
+  (interactive)
+  (evil-cp-backward-up-sexp) ;; Move backward up a sexp
+  (evil-insert-state)        ;; Enter insert mode
+  (insert "#_"))             ;; Insert `#_`
+

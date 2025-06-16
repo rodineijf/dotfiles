@@ -6,8 +6,20 @@
        "t" #'+custom/search-test-dir :desc "Search test dir"))
 
 (map!
+ :leader
+ (:prefix ("s" . "search")
+   "g" #'+nu/search-web-region-or-prompt :desc "Github search web"
+   (:prefix ("c" . "custom")
+     "s" #'+custom/search-src-dir  :desc "Search src dir"
+     "t" #'+custom/search-test-dir :desc "Search test dir")))
+
+(map!
  (:map evil-window-map
-       "a" #'ace-window))
+       "a" #'ace-window)
+ :nv "C-h" #'evil-window-left
+ :nv "C-l" #'evil-window-right
+ :nv "C-j" #'evil-window-down
+ :nv "C-k" #'evil-window-up)
 
 (map!
  :nvi "C-)" #'sp-forward-slurp-sexp

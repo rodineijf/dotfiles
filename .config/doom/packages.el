@@ -56,9 +56,6 @@
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
-(package! aidermacs
-  :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
-
-(package! ef-themes)
+(package! aidermacs)
 
 (package! pulsar)
