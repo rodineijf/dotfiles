@@ -141,4 +141,3 @@
   (evil-cp-backward-up-sexp) ;; Move backward up a sexp
   (evil-insert-state)        ;; Enter insert mode
   (insert "#_"))             ;; Insert `#_`
-

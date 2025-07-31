@@ -41,19 +41,19 @@
             :nv "s-D" #'evil-multiedit-match-and-prev
             [return]  #'evil-multiedit-toggle-or-restrict-region))))
 
-(map! 
+(map!
  (:map cider-repl-mode-map
        "<up>"   #'cider-repl-previous-input
        "<down>" #'cider-repl-next-input))
 
-(map! 
+(map!
  (:map copilot-completion-map
        "<tab>"    #'copilot-accept-completion
        "TAB"      #'copilot-accept-completion
        "C-TAB"    #'copilot-accept-completion-by-word
        "C-<tab>"  #'copilot-accept-completion-by-word))
 
-(after! dap-mode 
+(after! dap-mode
   (map!
    :localleader
    :map dart-mode-map
