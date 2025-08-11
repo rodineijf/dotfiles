@@ -46,7 +46,7 @@ require("lazy").setup({
         "tarPlugin",
         "tohtml",
         "tutor",
-        "zipPlugin",
+        -- "zipPlugin", -- jar files inspection does not work with this
       },
     },
   },

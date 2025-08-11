@@ -1,0 +1,5 @@
+syntax match Comment "\v^;.*$"
+yntax match Statement "\v^\%.*$"
+syntax match Operator "\v^\#.*$"
+syntax match String "\v\<.{-}\>"
+syntax match String "\v^\$.*$"
