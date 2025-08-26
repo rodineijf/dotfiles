@@ -8,12 +8,12 @@
   (require 'aider-doom)
   (aider-magit-setup-transients)) ;; add aider magit function to magit menu
 
-(use-package! copilot
-  ;; Disable hook to try lsp-copilot
-  :hook (prog-mode . copilot-mode)
-  :config
-  (add-to-list 'copilot-indentation-alist '(prog-mode 2))
-  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2)))
+;; (use-package! copilot
+;;   ;; Disable hook to try lsp-copilot
+;;   :hook (prog-mode . copilot-mode)
+;;   :config
+;;   (add-to-list 'copilot-indentation-alist '(prog-mode 2))
+;;   (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2)))
 
 (use-package aidermacs
   :bind (("C-c b" . aidermacs-transient-menu))
