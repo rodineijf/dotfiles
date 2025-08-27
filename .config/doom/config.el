@@ -14,15 +14,15 @@
 
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 
+(use-package go-mode
+  :hook (go-mode . (lambda () (setq tab-width 2))))
+
 (defun cider-load-buffer-and-reload-lsp ()
   (when (and (bound-and-true-p cider-mode)
              (not (string-match-p "project.clj" (buffer-file-name))))
     (cider-load-buffer)
     ;; fix semantics tokens wrongly highlighted after modifyng the buffer
     (lsp)))
-
-(use-package go-mode
-  :hook (go-mode . (lambda () (setq tab-width 2))))
 
 (use-package! cider
   :config (setq cider-reuse-dead-repls nil)
@@ -72,6 +72,7 @@
 
 (use-package! lsp-dart
   :after dart-mode
+  :hook (dart-mode . lsp-inlay-hints-mode)
   :config
   (setq lsp-dart-dap-flutter-hot-reload-on-save t
         lsp-dart-sdk-dir (expand-file-name "~/sdk-flutter/bin/cache/dart-sdk")
@@ -141,3 +142,27 @@
   (evil-cp-backward-up-sexp) ;; Move backward up a sexp
   (evil-insert-state)        ;; Enter insert mode
   (insert "#_"))             ;; Insert `#_`
+
+(defun vterm--kill-vterm-buffer-and-window (process event)
+  "Kill buffer and window on vterm process termination."
+  (when (not (process-live-p process))
+    (let ((buf (process-buffer process)))
+      (when (buffer-live-p buf)
+        (with-current-buffer buf
+          (kill-buffer)
+          (ignore-errors (delete-window))
+          (message "VTerm closed."))))))
+
+(add-hook 'vterm-mode-hook
+          (lambda ()
+            (add-function
+             :after
+             (process-sentinel (get-buffer-process (buffer-name)))
+             'vterm--kill-vterm-buffer-and-window))
+          :append)
+
+(defconst flutter--test-case-regexp
+  (concat "^[ \t]*\\(?:testWidgets\\|test\\|group\\|testBdc\\)([\n \t]*"
+          "\\([\"']\\)\\(.*[^\\]\\(?:\\\\\\\\\\)*\\|\\(?:\\\\\\\\\\)*\\)\\1,")
+  "Regexp for finding the string title of a test or test group, including testBdc.
+The title will be in match 2.")

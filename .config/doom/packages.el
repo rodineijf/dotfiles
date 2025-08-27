@@ -59,3 +59,8 @@
 (package! aidermacs)
 
 (package! pulsar)
+
+(package! aider)
+
+(package! eca 
+  :recipe (:host github :repo "editor-code-assistant/eca-emacs" :files ("*.el")))
