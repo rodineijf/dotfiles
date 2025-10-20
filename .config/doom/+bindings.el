@@ -5,6 +5,8 @@
        "s" #'+custom/search-src-dir  :desc "Search src dir"
        "t" #'+custom/search-test-dir :desc "Search test dir"))
 
+(map! :leader
+      "e" #'+treemacs/toggle  :desc "Project sidebar")
 (map!
  :leader
  (:prefix ("s" . "search")
@@ -66,3 +68,11 @@
             "a" #'+custom/dap-dart-attach-debug
             "h" #'dap-hydra
             "k" #'dap-disconnect)))
+
+;; Make window movement keys work inside Treemacs buffers
+(after! treemacs-evil
+  (evil-define-key 'treemacs treemacs-mode-map
+    (kbd "C-h") #'evil-window-left
+    (kbd "C-l") #'evil-window-right
+    (kbd "C-j") #'evil-window-down
+    (kbd "C-k") #'evil-window-up))
