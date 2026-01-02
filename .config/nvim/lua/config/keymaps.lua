@@ -7,6 +7,11 @@ local map = vim.keymap.set
 -- Paste pop
 map("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
 
+-- GitHub search org:nubank for visual or prompt
+map({ "n", "v" }, "<leader>sg", function()
+  require("config.websearch").search_github_nubank()
+end, { desc = "GitHub search org:nubank" })
+
 -- Bind cmd+/ to comment line (gcc)
 map("n", "<D-/>", "gcc", { desc = "Comment line", remap = true })
 map("v", "<D-/>", "gc", { desc = "Comment selection", remap = true })
