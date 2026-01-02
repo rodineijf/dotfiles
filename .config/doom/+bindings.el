@@ -76,3 +76,9 @@
     (kbd "C-l") #'evil-window-right
     (kbd "C-j") #'evil-window-down
     (kbd "C-k") #'evil-window-up))
+
+;; In eca-chat buffers, press localleader (",") to open the ECA menu
+(after! eca
+  (when (boundp 'eca-chat-mode-map)
+    (evil-define-key 'normal eca-chat-mode-map (kbd doom-localleader-key) #'eca-transient-menu)
+    (evil-define-key 'visual eca-chat-mode-map (kbd doom-localleader-key) #'eca-transient-menu)))

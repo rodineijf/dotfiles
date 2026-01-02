@@ -1,16 +1,16 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 (setq
-  doom-theme                     'doom-gruvbox ;'doom-monokai-ristretto
-  doom-font                      (font-spec :family "Jetbrains Mono" :size 14.0)
-  doom-localleader-key           ","
-  read-process-output-max        (* 1024 1024)
-  org-directory                  "~/org/"
-  display-line-numbers-type      'absolute
-  projectile-project-search-path '("~/dev/")
-  projectile-enable-caching      nil
-  evil-kill-on-visual-paste      nil
-  corfu-preselect                'first)
+ doom-theme                     'doom-gruvbox ;'doom-monokai-ristretto
+ doom-font                      (font-spec :family "Jetbrains Mono" :size 14.0)
+ doom-localleader-key           ","
+ read-process-output-max        (* 1024 1024)
+ org-directory                  "~/org/"
+ display-line-numbers-type      'absolute
+ projectile-project-search-path '("~/dev/")
+ projectile-enable-caching      nil
+ evil-kill-on-visual-paste      nil
+ corfu-preselect                'first)
 
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 
@@ -42,8 +42,7 @@
   :commands lsp
   :config   (setq lsp-semantic-tokens-enable t
                   ;; auto completion was not working with the default value
-                  lsp-completion-no-cache t)
-  :hook     (before-save . lsp-format-buffer))
+                  lsp-completion-no-cache t))
 
 (use-package! evil-cleverparens
   :init   (setq evil-cleverparens-swap-move-by-word-and-symbol t
@@ -166,3 +165,20 @@
           "\\([\"']\\)\\(.*[^\\]\\(?:\\\\\\\\\\)*\\|\\(?:\\\\\\\\\\)*\\)\\1,")
   "Regexp for finding the string title of a test or test group, including testBdc.
 The title will be in match 2.")
+
+(use-package doom-themes
+  :custom
+  ;; Global settings (defaults)
+  (doom-themes-enable-bold t)          ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t)        ; if nil, italics is universally disabled
+  ;; for treemacs users
+  (doom-themes-treemacs-theme "doom-colors") ; use "doom-colors" for less minimal icon theme
+  :config
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (nerd-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  )
