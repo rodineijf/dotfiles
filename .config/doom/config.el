@@ -81,6 +81,7 @@
 (load! "+nu")
 (load! "+bindings")
 (load! "+ui")
+(load! "+ai")
 
 (defun +custom/search-test-dir ()
   "Conduct a text search in files under `test-dir'."
@@ -103,8 +104,6 @@
            ((modulep! :completion helm)    #'+helm/project-search-from-cwd)
            ((modulep! :completion vertico) #'+vertico/project-search-from-cwd)
            (#'rgrep)))))
-
-(load! "+ai")
 
 (defun +custom/dap-dart-attach-debug (input)
   (interactive "sEnter VM Service URI: ")
@@ -182,3 +181,7 @@ The title will be in match 2.")
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   )
+
+(use-package! json-mode
+  :custom
+  (js-indent-level 2))
