@@ -56,7 +56,5 @@
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
-(package! pulsar)
-
 (package! eca 
   :recipe (:host github :repo "editor-code-assistant/eca-emacs" :files ("*.el")))

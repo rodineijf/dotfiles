@@ -14,12 +14,14 @@
 
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 
-(use-package go-mode
+(use-package! go-mode
+  :when (modulep! :lang go)
   :hook (go-mode . (lambda () (setq tab-width 2))))
 
 (defun cider-load-buffer-and-reload-lsp ()
   (when (and (bound-and-true-p cider-mode)
-             (not (string-match-p "project.clj" (buffer-file-name))))
+             (when-let ((file (buffer-file-name)))
+               (not (string-match-p "project.clj" file))))
     (cider-load-buffer)
     ;; fix semantics tokens wrongly highlighted after modifyng the buffer
     (lsp)))
@@ -28,13 +30,13 @@
   :config (setq cider-reuse-dead-repls nil)
   :hook   (after-save . cider-load-buffer-and-reload-lsp))
 
-(use-package magit-delta
+(use-package! magit-delta
   :hook   (magit-mode . magit-delta-mode)
   :config (setq magit-delta-default-dark-theme "DarkNeon"
                 magit-delta-default-light-theme "Github"
                 magit-delta-hide-plus-minus-markers t))
 
-(use-package evil-mc
+(use-package! evil-mc
   :config
   (add-to-list 'evil-mc-incompatible-minor-modes 'paredit-mode))
 
@@ -45,9 +47,9 @@
                   lsp-completion-no-cache t))
 
 (use-package! evil-cleverparens
+  :when   (modulep! :editor evil +everywhere)
   :init   (setq evil-cleverparens-swap-move-by-word-and-symbol t
                 evil-cleverparens-move-skip-delimiters nil)
-  :when   (modulep! :editor evil +everywhere)
   :hook   (smartparens-mode . evil-cleverparens-mode)
   :config (setq evil-move-beyond-eol t))
 
@@ -77,11 +79,6 @@
         lsp-dart-sdk-dir (expand-file-name "~/sdk-flutter/bin/cache/dart-sdk")
         lsp-dart-project-root-discovery-strategies '(closest-pubspec lsp-root))
   (set-popup-rule! "\\*LSP Dart tests\\*" :height 0.3))
-
-(load! "+nu")
-(load! "+bindings")
-(load! "+ui")
-(load! "+ai")
 
 (defun +custom/search-test-dir ()
   "Conduct a text search in files under `test-dir'."
@@ -119,31 +116,23 @@
 (use-package! dap-mode
   :hook (dap-stopped . (lambda (_) (call-interactively #'dap-hydra))))
 
-;; Define a major mode
+(defconst navi-font-lock-keywords
+  '((";.*$" . 'font-lock-comment-face)
+    ("^%.*$" . 'font-lock-keyword-face)
+    ("^#.*$" . 'font-lock-function-name-face)
+    ("<.*?>" . 'font-lock-string-face)
+    ("^$.*$" . 'font-lock-variable-name-face))
+  "Syntax highlighting rules for `navi-mode'.")
+
 (define-derived-mode navi-mode fundamental-mode "Navi Cheatsheet"
-  "Major mode for Navi Cheatsheet"
+  "Major mode for Navi Cheatsheet."
   (setq font-lock-defaults '((navi-font-lock-keywords))))
-
-;; Define syntax highlighting rules
-(setq navi-font-lock-keywords '((";.*$" . 'font-lock-comment-face)
-                                ("^%.*$" . 'font-lock-keyword-face)
-                                ("^#.*$" . 'font-lock-function-name-face)
-                                ("<.*?>" . 'font-lock-string-face)
-                                ("^$.*$" . 'font-lock-variable-name-face)))
-
 
 (add-to-list 'auto-mode-alist '("\\.cheat\\'" . navi-mode))
 
-(defun my-evil-cp-insert-comment ()
-  "Move backward up a sexp, enter insert mode, and insert `#_`."
-  (interactive)
-  (evil-cp-backward-up-sexp) ;; Move backward up a sexp
-  (evil-insert-state)        ;; Enter insert mode
-  (insert "#_"))             ;; Insert `#_`
-
 (defun vterm--kill-vterm-buffer-and-window (process event)
   "Kill buffer and window on vterm process termination."
-  (when (not (process-live-p process))
+  (unless (process-live-p process)
     (let ((buf (process-buffer process)))
       (when (buffer-live-p buf)
         (with-current-buffer buf
@@ -159,13 +148,14 @@
              'vterm--kill-vterm-buffer-and-window))
           :append)
 
-(defconst flutter--test-case-regexp
-  (concat "^[ \t]*\\(?:testWidgets\\|test\\|group\\|testBdc\\)([\n \t]*"
-          "\\([\"']\\)\\(.*[^\\]\\(?:\\\\\\\\\\)*\\|\\(?:\\\\\\\\\\)*\\)\\1,")
-  "Regexp for finding the string title of a test or test group, including testBdc.
-The title will be in match 2.")
+(after! flutter
+  (defconst flutter--test-case-regexp
+    (concat "^[ \t]*\\(?:testWidgets\\|test\\|group\\|testBdc\\)([\n \t]*"
+            "\\([\"']\\)\\(.*[^\\]\\(?:\\\\\\\\\\)*\\|\\(?:\\\\\\\\\\)*\\)\\1,")
+    "Regexp for finding the string title of a test or test group, including testBdc.
+The title will be in match 2."))
 
-(use-package doom-themes
+(use-package! doom-themes
   :custom
   ;; Global settings (defaults)
   (doom-themes-enable-bold t)          ; if nil, bold is universally disabled
@@ -182,6 +172,9 @@ The title will be in match 2.")
   ;; Corrects (and improves) org-mode's native fontification.
   )
 
-(use-package! json-mode
-  :custom
-  (js-indent-level 2))
+(after! json-mode
+  (setq js-indent-level 2))
+
+(load! "+nu")
+(load! "+bindings")
+(load! "+ai")

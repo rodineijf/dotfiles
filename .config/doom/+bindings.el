@@ -1,11 +1,6 @@
 ;;; $DOOMDIR/+bindings.el -*- lexical-binding: t; -*-
 
 (map! :leader
-      (:prefix "s"
-       "s" #'+custom/search-src-dir  :desc "Search src dir"
-       "t" #'+custom/search-test-dir :desc "Search test dir"))
-
-(map! :leader
       "e" #'+treemacs/toggle  :desc "Project sidebar")
 (map!
  :leader
