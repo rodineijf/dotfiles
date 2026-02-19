@@ -53,6 +53,7 @@
   :hook   (smartparens-mode . evil-cleverparens-mode)
   :config (setq evil-move-beyond-eol t))
 
+;; This fixes `viw` and `vaw` not working on symbols in evil mode
 (after! evil
   (defalias 'forward-evil-word 'forward-evil-symbol))
 
@@ -84,22 +85,14 @@
   (interactive)
   (let* ((project-root (projectile-project-root))
          (default-directory (expand-file-name "test" project-root)))
-    (call-interactively
-     (cond ((modulep! :completion ivy)     #'+ivy/project-search-from-cwd)
-           ((modulep! :completion helm)    #'+helm/project-search-from-cwd)
-           ((modulep! :completion vertico) #'+vertico/project-search-from-cwd)
-           (#'rgrep)))))
+    (call-interactively #'+vertico/project-search-from-cwd)))
 
 (defun +custom/search-src-dir ()
   "Conduct a text search in files under `src-dir'."
   (interactive)
   (let* ((project-root (projectile-project-root))
          (default-directory (expand-file-name "src" project-root)))
-    (call-interactively
-     (cond ((modulep! :completion ivy)     #'+ivy/project-search-from-cwd)
-           ((modulep! :completion helm)    #'+helm/project-search-from-cwd)
-           ((modulep! :completion vertico) #'+vertico/project-search-from-cwd)
-           (#'rgrep)))))
+    (call-interactively #'+vertico/project-search-from-cwd)))
 
 (defun +custom/dap-dart-attach-debug (input)
   (interactive "sEnter VM Service URI: ")
