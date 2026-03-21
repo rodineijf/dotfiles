@@ -9,13 +9,14 @@
 
 (defun +nu/nu-project-clone ()
   (interactive)
-  (when-let ((project (read-string "Project Name: ")))
-    (let* ((cmd (format "nu proj clone %s" project))
-           (buffer (get-buffer-create "*nu-proj-clone*")))
-      (pop-to-buffer buffer)
-      (async-shell-command cmd buffer)
-      (with-current-buffer buffer
-        (view-mode 1)))))
+  (let ((project (read-string "Project Name: ")))
+    (when (not (string-empty-p project))
+      (let* ((cmd (format "nu proj clone %s" project))
+             (buffer (get-buffer-create "*nu-proj-clone*")))
+        (pop-to-buffer buffer)
+        (async-shell-command cmd buffer)
+        (with-current-buffer buffer
+          (view-mode 1))))))
 
 (defun +nu/search-web-region-or-prompt (begin end)
   "Search the web for the selected region or prompt

@@ -5,10 +5,10 @@
 (map!
  :leader
  (:prefix ("s" . "search")
-   "g" #'+nu/search-web-region-or-prompt :desc "Github search web"
-   (:prefix ("c" . "custom")
-     "s" #'+custom/search-src-dir  :desc "Search src dir"
-     "t" #'+custom/search-test-dir :desc "Search test dir")))
+  :desc "Github search web" "g" #'+nu/search-web-region-or-prompt
+  (:prefix ("c" . "custom")
+   :desc "Search src dir"  "s" #'+custom/search-src-dir
+   :desc "Search test dir" "t" #'+custom/search-test-dir )))
 
 (map!
  (:map evil-window-map
@@ -45,10 +45,7 @@
 
 (map!
  (:map copilot-completion-map
-       "<tab>"    #'copilot-accept-completion
-       "TAB"      #'copilot-accept-completion
-       "C-TAB"    #'copilot-accept-completion-by-word
-       "C-<tab>"  #'copilot-accept-completion-by-word))
+       "<right>"    #'copilot-accept-completion-by-word))
 
 (after! dap-mode
   (map!
@@ -71,6 +68,30 @@
     (kbd "C-l") #'evil-window-right
     (kbd "C-j") #'evil-window-down
     (kbd "C-k") #'evil-window-up))
+
+(undefine-key! doom-leader-map "a")
+
+(map!
+ :leader
+ (:prefix ("a" . "agent")
+  :desc "Open shell"   "a" #'agent-shell-anthropic-start-claude-code
+  :desc "Toggle shell" "t" #'agent-shell-toggle
+  :desc "New shell"    "n" #'agent-shell-new-shell
+  :desc "Send file"    "f" #'agent-shell-send-file
+  :desc "Send dwim"    "b" #'agent-shell-send-dwim
+  :desc "Send region"  "r" #'agent-shell-send-region))
+
+(after! agent-shell
+  (map! :localleader
+        :map agent-shell-mode-map
+        :desc "Interrupt"       "i" #'agent-shell-interrupt
+        :desc "Restart session" "R" #'agent-shell-restart
+        :desc "Reload session"  "r" #'agent-shell-reload
+        :desc "Compose prompt"  "c" #'agent-shell-prompt-compose
+        :desc "Other buffer"    "o" #'agent-shell-other-buffer
+        :desc "Cycle mode"      "m" #'agent-shell-cycle-session-mode
+        :desc "Set model"       "M" #'agent-shell-set-session-model
+        :desc "Open transcript" "t" #'agent-shell-open-transcript))
 
 ;; In eca-chat buffers, press localleader (",") to open the ECA menu
 (after! eca

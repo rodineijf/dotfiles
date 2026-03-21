@@ -1,5 +1,17 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
+(require 'acp)
+(require 'agent-shell)
+
+(setq agent-shell-anthropic-authentication
+      (agent-shell-anthropic-make-authentication :login t)
+
+      agent-shell-display-action
+      '((display-buffer-in-side-window)
+        (side . right)
+        (slot . 0)
+        (window-width . 0.4)))
+
 (setq
  doom-theme                     'doom-gruvbox ;'doom-monokai-ristretto
  doom-font                      (font-spec :family "Jetbrains Mono" :size 14.0)
@@ -158,7 +170,7 @@ The title will be in match 2."))
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (nerd-icons must be installed!)
-  (doom-themes-neotree-config)
+  ;; (doom-themes-neotree-config)
   ;; or for treemacs users
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.

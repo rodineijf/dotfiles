@@ -58,3 +58,7 @@
 
 (package! eca 
   :recipe (:host github :repo "editor-code-assistant/eca-emacs" :files ("*.el")))
+
+(package! shell-maker)
+(package! acp)
+(package! agent-shell)
