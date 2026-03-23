@@ -4,6 +4,7 @@
     "lazyvim.plugins.extras.coding.yanky",
     "lazyvim.plugins.extras.editor.mini-diff",
     "lazyvim.plugins.extras.lang.clojure",
+    "lazyvim.plugins.extras.lang.dart",
     "lazyvim.plugins.extras.util.octo",
     "plugins.extras.lang.dart"
   ],
