@@ -23,8 +23,6 @@ else
   compinit -C
 fi
 
-source ~/zsh-defer/zsh-defer.plugin.zsh
-
 source ~/.zsh/exports.zsh
 source ~/.zsh/path.zsh
 source ~/.zsh/aliases.zsh
