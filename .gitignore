@@ -1,0 +1,5 @@
+.aider*
+.config/doom/custom.el
+.DS_Store
+/.agent-shell/
+.zsh/nu.zsh
